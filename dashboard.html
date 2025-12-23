@@ -1,0 +1,561 @@
+{{define "base_head"}}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>СУП МГТУ</title>
+  <link href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
+    :root {
+      --tblr-font-sans-serif: 'JetBrains Mono', monospace;
+      --bg-main: #0f172a;
+      --bg-card: #020617;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #3b82f6;
+    }
+    body {
+      font-family: var(--tblr-font-sans-serif);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+    }
+    .page, .page-wrapper, .container-xl {
+      background-color: var(--bg-main);
+    }
+    .card {
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      border-color: #1f2937;
+    }
+    .navbar {
+      background-color: #020617 !important;
+      border-bottom: 1px solid #1f2937;
+    }
+    .navbar-brand a {
+      color: var(--text-main) !important;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+    .btn-primary:hover {
+      background-color: #2563eb;
+      border-color: #2563eb;
+    }
+    .form-control, .form-select {
+      background-color: #020617;
+      color: var(--text-main);
+      border-color: #374151;
+    }
+    .form-control::placeholder {
+      color: #6b7280;
+    }
+    .badge.bg-blue-lt, .badge.bg-red-lt {
+      background-color: #111827 !important;
+      color: var(--text-main) !important;
+    }
+    .avatar {
+      min-width: 60px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .badge {
+      white-space: nowrap;
+    }
+    .journal-cell {
+      width: 40px;
+      text-align: center;
+    }
+    .journal-cell-editable {
+      cursor: pointer;
+    }
+    .journal-cell-editable:hover {
+      background-color: #111827;
+    }
+    .mark-present {
+      color: #3b82f6;
+      font-weight: 600;
+    }
+    .subject-cell {
+      white-space: normal;
+    }
+    .subject-title {
+      overflow-wrap: break-word;
+      line-height: 1.2;
+    }
+    .list-group-item {
+      padding-top: 0.6rem;
+      padding-bottom: 0.6rem;
+    }
+  </style>
+</head>
+{{end}}
+
+{{/* ===== ЛОГИН ===== */}}
+{{define "login"}}
+{{template "base_head" .}}
+<body class="d-flex flex-column">
+  <div class="page page-center">
+    <div class="container container-tight py-4">
+      <div class="card card-md">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Вход в систему</h2>
+          {{if .}}<div class="alert alert-danger">{{.}}</div>{{end}}
+          <form action="/login" method="post">
+            <div class="mb-3">
+              <label class="form-label">Логин</label>
+              <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Пароль</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Войти</button>
+          </form>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a href="/register">Регистрация</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
+
+{{/* ===== РЕГИСТРАЦИЯ ===== */}}
+{{define "register"}}
+{{template "base_head" .}}
+<body class="d-flex flex-column">
+  <div class="page page-center">
+    <div class="container container-tight py-4">
+      <div class="card card-md">
+        <div class="card-body">
+          <h2 class="text-center mb-4">Регистрация</h2>
+          {{if .}}<div class="alert alert-danger">{{.}}</div>{{end}}
+          <form action="/register" method="post">
+            <div class="mb-3">
+              <label class="form-label">Роль</label>
+              <select name="role" class="form-select" id="roleSelect" onchange="toggleGroup()">
+                <option value="starosta">Староста</option>
+                <option value="teacher">Преподаватель</option>
+                <option value="admin">Администратор</option>
+              </select>
+            </div>
+            <div class="mb-3" id="groupBlock">
+              <label class="form-label">Группа (только для старост)</label>
+              <select name="group_id" class="form-select">
+                <option value="1">ИУ5-31Б</option>
+                <option value="2">ИУ5-32Б</option>
+                <option value="3">ИУ5-33Б</option>
+                <option value="4">ИУ5-34Б</option>
+                <option value="5">ИУ5-35Б</option>
+                <option value="6">ИУ5-36Б</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Логин</label>
+              <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Пароль</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Создать аккаунт</button>
+          </form>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <a href="/login">Уже есть аккаунт?</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    function toggleGroup() {
+      const role = document.getElementById('roleSelect').value;
+      const block = document.getElementById('groupBlock');
+      block.style.display = (role === 'starosta') ? 'block' : 'none';
+    }
+  </script>
+</body>
+</html>
+{{end}}
+
+{{/* ===== ПАНЕЛЬ СТАРОСТЫ ===== */}}
+{{define "dashboard"}}
+{{template "base_head" .}}
+<body>
+  <div class="page">
+    <header class="navbar navbar-expand-md navbar-light d-print-none">
+      <div class="container-xl d-flex justify-content-between align-items-center">
+        <h1 class="navbar-brand mb-0">
+          <a href="/" class="d-flex align-items-center">
+            <span class="me-2">СУП МГТУ</span>
+            <img src="/static/bmstu.png" alt="BMSTU" style="height:32px;">
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row">
+          <span class="badge bg-blue-lt me-2">{{.User.Username}}</span>
+          <a href="/logout" class="btn btn-sm btn-outline-danger">Выход</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <h2 class="page-title">Группа: {{.GroupName}}</h2>
+            </div>
+            <div class="col-auto ms-auto d-print-none">
+              <form action="/" method="get" class="d-flex gap-2 align-items-center">
+                <label class="form-label mb-0">Неделя</label>
+                <select name="week" class="form-select" onchange="this.form.submit()">
+                  {{$sel := .SelectedWeek}}
+                  {{range .Weeks17}}
+                  <option value="{{.}}" {{if eq . $sel}}selected{{end}}>{{.}}</option>
+                  {{end}}
+                </select>
+                <span class="badge {{if eq .WeekType "numerator"}}bg-blue-lt{{else}}bg-red-lt{{end}}"
+                      style="min-width: 130px; text-align:center; font-weight:600; font-size:14px;"
+                      title="{{if eq .WeekType "numerator"}}Числитель{{else}}Знаменатель{{end}}">
+                  {{if eq .WeekType "numerator"}}ЧИСЛИТЕЛЬ{{else}}ЗНАМЕНАТЕЛЬ{{end}}
+                </span>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="row row-deck row-cards">
+            {{$sch := .Schedule}}
+            {{range $day := .Weeks17}}{{if le $day 6}}
+            <div class="col-md-6 col-lg-4">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    {{if eq $day 1}}Понедельник{{else if eq $day 2}}Вторник{{else if eq $day 3}}Среда{{else if eq $day 4}}Четверг{{else if eq $day 5}}Пятница{{else}}Суббота{{end}}
+                  </h3>
+                </div>
+                <div class="list-group list-group-flush">
+                  {{if index $sch $day}}
+                    {{range index $sch $day}}
+                    <div class="list-group-item">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <span class="avatar">{{.TimeStart}}</span>
+                        </div>
+                        <div class="col subject-cell">
+                          <div class="text-reset d-block subject-title">{{.Subject}}</div>
+                          <div class="text-muted mt-n1">{{.Room}} • {{.Teacher}}</div>
+                        </div>
+                        <div class="col-auto">
+                          <a href="/journal?id={{.ID}}" class="btn btn-primary btn-sm">Журнал</a>
+                        </div>
+                      </div>
+                    </div>
+                    {{end}}
+                  {{else}}
+                    <div class="list-group-item text-center text-muted">Нет пар</div>
+                  {{end}}
+                </div>
+              </div>
+            </div>
+            {{end}}{{end}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
+
+{{/* ===== ЖУРНАЛ ===== */}}
+{{define "journal"}}
+{{template "base_head" .}}
+<body>
+  <div class="page">
+    <header class="navbar navbar-light">
+      <div class="container-xl d-flex justify-content-between align-items-center">
+        <h1 class="navbar-brand mb-0">
+          <a href="/" class="d-flex align-items-center">
+            <span class="me-2">СУП МГТУ</span>
+            <img src="/static/bmstu.png" alt="BMSTU" style="height:32px;">
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row">
+          <a href="javascript:history.back()" class="btn btn-outline-secondary btn-sm">Назад</a>
+        </div>
+      </div>
+    </header>
+    <div class="page-wrapper">
+      <div class="page-header">
+        <div class="container-xl">
+          <h2 class="page-title">{{.SubjectName}}</h2>
+          <p class="text-muted">
+            Недели: {{if eq .WeekType "numerator"}}числитель{{else}}знаменатель{{end}}
+          </p>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter table-bordered card-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2">Студент</th>
+                    <th colspan="{{len .Weeks}}" class="text-center">Недели</th>
+                  </tr>
+                  <tr>
+                    {{range .Weeks}}<th class="text-center">{{.}}</th>{{end}}
+                  </tr>
+                </thead>
+                <tbody>
+                  {{$weeks := .Weeks}}
+                  {{$sid := .SubjectID}}
+                  {{range .Rows}}
+                  <tr>
+                    <td>{{.StudentName}}</td>
+                    {{$st := .StudentID}}
+                    {{$marks := .Marks}}
+                    {{range $weeks}}
+                    <td class="journal-cell {{if eq $.Role "starosta"}}journal-cell-editable{{end}}"
+                        {{if eq $.Role "starosta"}}
+                          onclick="toggleMark(this, {{$st}}, {{$sid}}, {{.}})"
+                        {{end}}>
+                      {{if index $marks .}}<span class="mark-present">✔</span>{{end}}
+                    </td>
+                    {{end}}
+                  </tr>
+                  {{end}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function toggleMark(cell, stID, subjID, week) {
+      let filled = cell.innerHTML.includes('✔');
+      let action = filled ? 'remove' : 'add';
+      cell.innerHTML = filled ? '' : '<span class="mark-present">✔</span>';
+      fetch('/api/mark', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({StudentID: stID, ScheduleID: subjID, Week: week, Action: action})
+      }).then(r => { if (!r.ok) alert('Ошибка сохранения'); });
+    }
+  </script>
+</body>
+</html>
+{{end}}
+
+{{/* ===== ПРЕПОД: список групп ===== */}}
+{{define "teacher_dashboard"}}
+{{template "base_head" .}}
+<body>
+  <div class="page">
+    <header class="navbar navbar-light">
+      <div class="container-xl d-flex justify-content-between align-items-center">
+        <h1 class="navbar-brand mb-0">
+          <a href="/" class="d-flex align-items-center">
+            <span class="me-2">СУП МГТУ</span>
+            <img src="/static/bmstu.png" alt="BMSTU" style="height:32px;">
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row">
+          <span class="badge bg-blue-lt me-2">{{.User.Username}}</span>
+          <a href="/logout" class="btn btn-sm btn-outline-danger">Выход</a>
+        </div>
+      </div>
+    </header>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Группы и журналы посещаемости</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-vcenter">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Группа</th>
+                    <th>Студентов</th>
+                    <th>Пар в расписании</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{range .Groups}}
+                  <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Name}}</td>
+                    <td>{{.Students}}</td>
+                    <td>{{.Lessons}}</td>
+                    <td class="text-end">
+                      <a href="/group-journals?group={{.ID}}" class="btn btn-sm btn-primary">
+                        Журналы группы
+                      </a>
+                    </td>
+                  </tr>
+                  {{end}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
+
+{{/* ===== ПРЕПОД: список пар группы ===== */}}
+{{define "teacher_group_journals"}}
+{{template "base_head" .}}
+<body>
+  <div class="page">
+    <header class="navbar navbar-light">
+      <div class="container-xl d-flex justify-content-between align-items-center">
+        <h1 class="navbar-brand mb-0">
+          <a href="/" class="d-flex align-items-center">
+            <span class="me-2">СУП МГТУ</span>
+            <img src="/static/bmstu.png" alt="BMSTU" style="height:32px;">
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row">
+          <a href="javascript:history.back()" class="btn btn-sm btn-outline-secondary">Назад</a>
+        </div>
+      </div>
+    </header>
+    <div class="page-wrapper">
+      <div class="page-header">
+        <div class="container-xl">
+          <h2 class="page-title">Журналы группы {{.GroupName}}</h2>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table table-vcenter">
+                <thead>
+                  <tr>
+                    <th>День</th>
+                    <th>Время</th>
+                    <th>Предмет</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{range .Lessons}}
+                  <tr>
+                    <td>
+                      {{if eq .Day 1}}Пн{{else if eq .Day 2}}Вт{{else if eq .Day 3}}Ср{{else if eq .Day 4}}Чт{{else if eq .Day 5}}Пт{{else}}Сб{{end}}
+                    </td>
+                    <td>{{.Time}}</td>
+                    <td>{{.Subject}}</td>
+                    <td class="text-end">
+                      <a href="/journal?id={{.ID}}" class="btn btn-sm btn-primary">Открыть журнал</a>
+                    </td>
+                  </tr>
+                  {{end}}
+                  {{if not .Lessons}}
+                  <tr>
+                    <td colspan="4" class="text-center text-muted">Для этой группы нет пар в расписании</td>
+                  </tr>
+                  {{end}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
+
+{{/* ===== АДМИН ===== */}}
+{{define "admin_dashboard"}}
+{{template "base_head" .}}
+<body>
+  <div class="page">
+    <header class="navbar navbar-light">
+      <div class="container-xl d-flex justify-content-between align-items-center">
+        <h1 class="navbar-brand mb-0">
+          <a href="/" class="d-flex align-items-center">
+            <span class="me-2">СУП МГТУ</span>
+            <img src="/static/bmstu.png" alt="BMSTU" style="height:32px;">
+          </a>
+        </h1>
+        <div class="navbar-nav flex-row">
+          <span class="badge bg-blue-lt me-2">{{.User.Username}}</span>
+          <a href="/logout" class="btn btn-sm btn-outline-danger">Выход</a>
+        </div>
+      </div>
+    </header>
+    <div class="page-wrapper">
+      <div class="page-body">
+        <div class="container-xl">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Пользователи</h3>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-vcenter">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Логин</th>
+                    <th>Роль</th>
+                    <th>Группа</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{range .Users}}
+                  <tr>
+                    <td>{{.ID}}</td>
+                    <td>{{.Username}}</td>
+                    <td>{{.Role}}</td>
+                    <td>{{.Group}}</td>
+                    <td class="text-end">
+                      <form action="/admin/delete-user" method="post"
+                            onsubmit="return confirm('Удалить пользователя {{.Username}}?');">
+                        <input type="hidden" name="id" value="{{.ID}}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                      </form>
+                    </td>
+                  </tr>
+                  {{end}}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+{{end}}
